@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Daikin - Version Pro</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f7f9fc; color: #333; margin: 0; padding: 0; }
+    .container { max-width: 800px; margin: 40px auto; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h1 { text-align: center; color: #007AC2; }
+    .btn { display: block; width: 100%; padding: 12px; background: #007AC2; color: white; border: none; font-size: 16px; margin-top: 20px; cursor: pointer; border-radius: 8px; }
+    .btn:hover { background: #005a8c; }
+    .question { margin-top: 20px; }
+    .answers { margin-top: 10px; }
+    .answers label { display: block; margin-bottom: 10px; }
+    .score { font-size: 20px; margin-top: 30px; text-align: center; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Quiz Daikin</h1>
+    <div id="intro">
+      <p>Bienvenue dans le quiz interactif pour maîtriser la gamme Daikin 💨</p>
+      <button class="btn" onclick="startQuiz()">Commencer le Quiz</button>
+    </div>
+    <div id="quiz" class="hidden">
+      <div id="question-container" class="question"></div>
+      <div id="answer-buttons" class="answers"></div>
+      <button id="next-btn" class="btn hidden" onclick="nextQuestion()">Question suivante</button>
+    </div>
+    <div id="result" class="score hidden"></div>
+  </div>
+
+<script>
+const questions = [
+  { q: "Que signifie la lettre 'Z' dans une référence d’unité extérieure Daikin ?", a: ["Stylish", "Ururu Sarara", "Emura", "Perfera"], correct: 1 },
+  { q: "La gamme 'Emura' correspond à quel segment ?", a: ["Entrée de gamme", "Moyenne gamme", "Haut de gamme", "Gainable"], correct: 2 },
+  { q: "SCOP représente :", a: ["Efficacité saisonnière en chaud", "Puissance sonore", "Classe énergétique", "Température de confort"], correct: 0 },
+  { q: "Quel fluide est utilisé dans les dernières générations Daikin ?", a: ["R32", "R410A", "R290", "CO2"], correct: 0 },
+  { q: "Quel type d’unité est 'FVXM-A' ?", a: ["Console", "Murale", "Cassette", "Gainable"], correct: 0 },
+  { q: "Le SEER mesure :", a: ["Consommation électrique", "Efficacité saisonnière en froid", "Niveau sonore", "Puissance nominale"], correct: 1 },
+  { q: "Quel modèle est le plus premium ?", a: ["Comfora", "Perfera", "Emura", "Sensira"], correct: 2 },
+  { q: "Dans 'FTXM-R', que veut dire le M ?", a: ["Murale", "Multi-split", "Mono-split", "Moyenne gamme"], correct: 3 },
+  { q: "Lequel est une unité intérieure murale ?", a: ["FVXM", "FTXM", "FBA", "FDXM"], correct: 1 },
+  { q: "Que veut dire 'Optimized Heating 4'", a: ["Optimisation sonore", "Mode ventilation", "Optimisation chauffage -20°C", "Mode éco automatique"], correct: 2 },
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+function startQuiz() {
+  document.getElementById("intro").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = questions[currentQuestion];
+  const questionContainer = document.getElementById("question-container");
+  const answerButtons = document.getElementById("answer-buttons");
+  questionContainer.innerHTML = "<h3>" + q.q + "</h3>";
+  answerButtons.innerHTML = "";
+  q.a.forEach((answer, index) => {
+    const btn = document.createElement("button");
+    btn.classList.add("btn");
+    btn.textContent = answer;
+    btn.onclick = () => selectAnswer(index);
+    answerButtons.appendChild(btn);
+  });
+}
+
+function selectAnswer(index) {
+  const correct = questions[currentQuestion].correct;
+  if (index === correct) score++;
+  document.getElementById("next-btn").classList.remove("hidden");
+  const buttons = document.querySelectorAll("#answer-buttons button");
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    btn.style.background = i === correct ? "#28a745" : "#dc3545";
+  });
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  if (currentQuestion < questions.length) {
+    showQuestion();
+    document.getElementById("next-btn").classList.add("hidden");
+  } else {
+    showScore();
+  }
+}
+
+function showScore() {
+  document.getElementById("quiz").classList.add("hidden");
+  const result = document.getElementById("result");
+  let message = score >= 17 ? "🎉 Bravo, tu maîtrises la gamme Daikin comme un pro !" :
+                score >= 12 ? "💪 Très bien, encore un petit effort pour devenir expert." :
+                              "📘 Courage ! Revois les fiches et retente ta chance.";
+  result.innerHTML = `<p>Score : ${score} / ${questions.length}</p><p>${message}</p>`;
+  result.classList.remove("hidden");
+}
+</script>
+</body>
+</html>
