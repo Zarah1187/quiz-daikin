@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz Daikin - Gammes et Références</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f0f4fa;
+      padding: 20px;
+    }
+    .quiz-container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+    }
+    .question {
+      margin: 20px 0;
+    }
+    .choices button {
+      display: block;
+      width: 100%;
+      margin: 5px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #eee;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .choices button.correct {
+      background-color: #c8e6c9;
+      border-color: #2e7d32;
+    }
+    .choices button.incorrect {
+      background-color: #ffcdd2;
+      border-color: #c62828;
+    }
+    #start-btn {
+      margin-top: 20px;
+      display: block;
+      padding: 10px;
+      width: 100%;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Quiz Daikin</h1>
+    <div id="quiz"></div>
+    <button id="start-btn">Commencer le Quiz</button>
+  </div>
+  <script>
+    const questions = [
+      { q: "Quelle est la référence de l'unité Stylish ?", a: "FTXJ", c: ["FTXM", "FVXM", "FTXJ"] },
+      { q: "Que signifie RXM ?", a: "Unité extérieure monosplit", c: ["Unité intérieure", "Unité gainable", "Unité extérieure monosplit"] },
+      { q: "Quelle gamme est la plus haut de gamme ?", a: "Stylish", c: ["Perfera", "Comfora", "Stylish"] },
+      { q: "Quel est le SCOP d’un système très performant ?", a: "≥ 4", c: ["2", "≥ 4", "3"] },
+      { q: "Unité murale entrée de gamme ?", a: "Comfora", c: ["Stylish", "FVXM", "Comfora"] },
+      { q: "À quoi correspond le code FTXM ?", a: "Unité murale", c: ["Unité extérieure", "Console", "Unité murale"] },
+      { q: "Que signifie RXJ ?", a: "Unité extérieure Stylish", c: ["Unité intérieure", "Unité murale", "Unité extérieure Stylish"] },
+      { q: "Quel est le SEER d’un appareil très efficace ?", a: "≥ 6", c: ["3", "5", "≥ 6"] },
+      { q: "Quelle gamme correspond à FVXM ?", a: "Console Perfera", c: ["Stylish", "Console Perfera", "Gainable"] },
+      { q: "Quel est le type de l’unité FBA ?", a: "Gainable", c: ["Murale", "Gainable", "Cassette"] },
+    ];
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    const quizEl = document.getElementById("quiz");
+    const startBtn = document.getElementById("start-btn");
+
+    function loadQuiz() {
+      quizEl.innerHTML = "";
+      shuffle(questions);
+      const selected = questions.slice(0, 10);
+      selected.forEach((q, index) => {
+        const div = document.createElement("div");
+        div.classList.add("question");
+        const title = document.createElement("p");
+        title.textContent = `${index + 1}. ${q.q}`;
+        div.appendChild(title);
+        const choices = document.createElement("div");
+        choices.classList.add("choices");
+        shuffle(q.c);
+        q.c.forEach(choice => {
+          const btn = document.createElement("button");
+          btn.textContent = choice;
+          btn.onclick = () => {
+            if (btn.textContent === q.a) {
+              btn.classList.add("correct");
+            } else {
+              btn.classList.add("incorrect");
+            }
+            Array.from(choices.children).forEach(b => {
+              b.disabled = true;
+              if (b.textContent === q.a) b.classList.add("correct");
+              else if (!b.classList.contains("correct")) b.classList.add("incorrect");
+            });
+          };
+          choices.appendChild(btn);
+        });
+        div.appendChild(choices);
+        quizEl.appendChild(div);
+      });
+    }
+
+    startBtn.addEventListener("click", loadQuiz);
+  </script>
+</body>
+</html>
