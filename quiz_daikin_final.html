@@ -1,0 +1,1149 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz Daikin - Gammes et Références</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f0f4fa;
+      padding: 20px;
+    }
+    .quiz-container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .question {
+      margin: 20px 0;
+    }
+    .choices button {
+      display: block;
+      width: 100%;
+      margin: 5px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #eee;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .choices button.correct {
+      background-color: #c8e6c9;
+      border-color: #2e7d32;
+    }
+    .choices button.incorrect {
+      background-color: #ffcdd2;
+      border-color: #c62828;
+    }
+    .hidden {
+      display: none;
+    }
+    #next-button {
+      margin-top: 20px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Quiz Daikin</h1>
+    <button id="start-btn">Commencer le Quiz</button>
+    <div id="quiz-box" class="hidden">
+      <div id="question-text" class="question"></div>
+      <div id="choices" class="choices"></div>
+      <button id="next-button" class="hidden">Suivant</button>
+    </div>
+    <div id="result" class="hidden"></div>
+  </div>
+  <script>
+    const allQuestions = [
+  {
+    "question": "Que veut dire le code FTXM ? (variante 79)",
+    "options": [
+      "Gamme Stylish",
+      "Console murale",
+      "Unité murale Comfora",
+      "Cassette double flux"
+    ],
+    "answer": "Unité murale Comfora"
+  },
+  {
+    "question": "Que veut dire le code FTXM ? (variante 49)",
+    "options": [
+      "Gamme Stylish",
+      "Console murale",
+      "Unité murale Comfora",
+      "Cassette double flux"
+    ],
+    "answer": "Unité murale Comfora"
+  },
+  {
+    "question": "Que signifie A+++ ? (variante 89)",
+    "options": [
+      "Classe de performance élevée",
+      "Produit entrée de gamme",
+      "Unité extérieure",
+      "Mode veille"
+    ],
+    "answer": "Classe de performance élevée"
+  },
+  {
+    "question": "Emura est une gamme : (variante 84)",
+    "options": [
+      "Console",
+      "Murale haut de gamme",
+      "Gainable",
+      "Mobile"
+    ],
+    "answer": "Murale haut de gamme"
+  },
+  {
+    "question": "Quel élément optimise l’efficacité en hiver ? (variante 45)",
+    "options": [
+      "Flash Streamer",
+      "Pré-dégivrage intelligent",
+      "Réseau Wi-Fi",
+      "Mode veille"
+    ],
+    "answer": "Pré-dégivrage intelligent"
+  },
+  {
+    "question": "Que signifie A+++ ? (variante 44)",
+    "options": [
+      "Classe de performance élevée",
+      "Produit entrée de gamme",
+      "Unité extérieure",
+      "Mode veille"
+    ],
+    "answer": "Classe de performance élevée"
+  },
+  {
+    "question": "Quelle est la gamme entrée de gamme Daikin ? (variante 21)",
+    "options": [
+      "Stylish",
+      "Perfera",
+      "Comfora",
+      "Emura"
+    ],
+    "answer": "Comfora"
+  },
+  {
+    "question": "Quelle est la gamme la plus design chez Daikin ? (variante 67)",
+    "options": [
+      "Perfera",
+      "Comfora",
+      "Stylish",
+      "Sensira"
+    ],
+    "answer": "Stylish"
+  },
+  {
+    "question": "Quel élément optimise l’efficacité en hiver ? (variante 75)",
+    "options": [
+      "Flash Streamer",
+      "Pré-dégivrage intelligent",
+      "Réseau Wi-Fi",
+      "Mode veille"
+    ],
+    "answer": "Pré-dégivrage intelligent"
+  },
+  {
+    "question": "La référence RXJ correspond à quel type d’unité ? (variante 47)",
+    "options": [
+      "Unité extérieure",
+      "Unité intérieure murale",
+      "Gamme Altherma",
+      "Console double flux"
+    ],
+    "answer": "Unité extérieure"
+  },
+  {
+    "question": "Quelle est la gamme la plus design chez Daikin ? (variante 52)",
+    "options": [
+      "Perfera",
+      "Comfora",
+      "Stylish",
+      "Sensira"
+    ],
+    "answer": "Stylish"
+  },
+  {
+    "question": "La gamme Stylish correspond à quelle référence ? (variante 93)",
+    "options": [
+      "FTXM",
+      "FTXA",
+      "RXM",
+      "FVXM"
+    ],
+    "answer": "FTXA"
+  },
+  {
+    "question": "Un SCOP élevé signifie : (variante 28)",
+    "options": [
+      "Moins performant",
+      "Plus bruyant",
+      "Plus économe en hiver",
+      "Inutile"
+    ],
+    "answer": "Plus économe en hiver"
+  },
+  {
+    "question": "À quoi correspond le SCOP ? (variante 86)",
+    "options": [
+      "Efficacité en mode froid",
+      "Efficacité annuelle en mode chaud",
+      "Puissance acoustique",
+      "Tension d’alimentation"
+    ],
+    "answer": "Efficacité annuelle en mode chaud"
+  },
+  {
+    "question": "La référence RXJ correspond à quel type d’unité ? (variante 62)",
+    "options": [
+      "Unité extérieure",
+      "Unité intérieure murale",
+      "Gamme Altherma",
+      "Console double flux"
+    ],
+    "answer": "Unité extérieure"
+  },
+  {
+    "question": "La référence FVXM correspond à : (variante 95)",
+    "options": [
+      "Cassette plafond",
+      "Console double flux",
+      "Unité extérieure",
+      "Murale design"
+    ],
+    "answer": "Console double flux"
+  },
+  {
+    "question": "Sensira est : (variante 85)",
+    "options": [
+      "Unité extérieure",
+      "Entrée de gamme Daikin",
+      "Console",
+      "Cassette"
+    ],
+    "answer": "Entrée de gamme Daikin"
+  },
+  {
+    "question": "La référence FVXM correspond à : (variante 80)",
+    "options": [
+      "Cassette plafond",
+      "Console double flux",
+      "Unité extérieure",
+      "Murale design"
+    ],
+    "answer": "Console double flux"
+  },
+  {
+    "question": "Le SEER mesure : (variante 87)",
+    "options": [
+      "L'humidité",
+      "La consommation électrique",
+      "L'efficacité en mode froid",
+      "Le bruit"
+    ],
+    "answer": "L'efficacité en mode froid"
+  },
+  {
+    "question": "La gamme Comfora est plutôt :",
+    "options": [
+      "Haut de gamme",
+      "Moyenne gamme",
+      "Entrée de gamme",
+      "Industrie"
+    ],
+    "answer": "Entrée de gamme"
+  },
+  {
+    "question": "Que signifie A+++ ?",
+    "options": [
+      "Classe de performance élevée",
+      "Produit entrée de gamme",
+      "Unité extérieure",
+      "Mode veille"
+    ],
+    "answer": "Classe de performance élevée"
+  },
+  {
+    "question": "Sensira est : (variante 55)",
+    "options": [
+      "Unité extérieure",
+      "Entrée de gamme Daikin",
+      "Console",
+      "Cassette"
+    ],
+    "answer": "Entrée de gamme Daikin"
+  },
+  {
+    "question": "La gamme Stylish correspond à quelle référence ? (variante 78)",
+    "options": [
+      "FTXM",
+      "FTXA",
+      "RXM",
+      "FVXM"
+    ],
+    "answer": "FTXA"
+  },
+  {
+    "question": "Emura est une gamme : (variante 54)",
+    "options": [
+      "Console",
+      "Murale haut de gamme",
+      "Gainable",
+      "Mobile"
+    ],
+    "answer": "Murale haut de gamme"
+  },
+  {
+    "question": "La gamme Stylish correspond à quelle référence ?",
+    "options": [
+      "FTXM",
+      "FTXA",
+      "RXM",
+      "FVXM"
+    ],
+    "answer": "FTXA"
+  },
+  {
+    "question": "Quelle est la gamme la plus design chez Daikin ? (variante 82)",
+    "options": [
+      "Perfera",
+      "Comfora",
+      "Stylish",
+      "Sensira"
+    ],
+    "answer": "Stylish"
+  },
+  {
+    "question": "Que signifie la lettre T dans une référence Daikin ? (variante 46)",
+    "options": [
+      "Unité murale",
+      "Console au sol",
+      "Technologie murale",
+      "Cassette plafond"
+    ],
+    "answer": "Unité murale"
+  },
+  {
+    "question": "Que signifie A+++ ? (variante 74)",
+    "options": [
+      "Classe de performance élevée",
+      "Produit entrée de gamme",
+      "Unité extérieure",
+      "Mode veille"
+    ],
+    "answer": "Classe de performance élevée"
+  },
+  {
+    "question": "La gamme Stylish correspond à quelle référence ? (variante 48)",
+    "options": [
+      "FTXM",
+      "FTXA",
+      "RXM",
+      "FVXM"
+    ],
+    "answer": "FTXA"
+  },
+  {
+    "question": "Quelle est la gamme la plus design chez Daikin ? (variante 37)",
+    "options": [
+      "Perfera",
+      "Comfora",
+      "Stylish",
+      "Sensira"
+    ],
+    "answer": "Stylish"
+  },
+  {
+    "question": "Emura est une gamme : (variante 99)",
+    "options": [
+      "Console",
+      "Murale haut de gamme",
+      "Gainable",
+      "Mobile"
+    ],
+    "answer": "Murale haut de gamme"
+  },
+  {
+    "question": "Que signifie A+++ ? (variante 59)",
+    "options": [
+      "Classe de performance élevée",
+      "Produit entrée de gamme",
+      "Unité extérieure",
+      "Mode veille"
+    ],
+    "answer": "Classe de performance élevée"
+  },
+  {
+    "question": "Sensira est : (variante 40)",
+    "options": [
+      "Unité extérieure",
+      "Entrée de gamme Daikin",
+      "Console",
+      "Cassette"
+    ],
+    "answer": "Entrée de gamme Daikin"
+  },
+  {
+    "question": "La gamme Comfora est plutôt : (variante 23)",
+    "options": [
+      "Haut de gamme",
+      "Moyenne gamme",
+      "Entrée de gamme",
+      "Industrie"
+    ],
+    "answer": "Entrée de gamme"
+  },
+  {
+    "question": "La référence RXJ correspond à quel type d’unité ?",
+    "options": [
+      "Unité extérieure",
+      "Unité intérieure murale",
+      "Gamme Altherma",
+      "Console double flux"
+    ],
+    "answer": "Unité extérieure"
+  },
+  {
+    "question": "Un SCOP élevé signifie : (variante 73)",
+    "options": [
+      "Moins performant",
+      "Plus bruyant",
+      "Plus économe en hiver",
+      "Inutile"
+    ],
+    "answer": "Plus économe en hiver"
+  },
+  {
+    "question": "Quel élément optimise l’efficacité en hiver ? (variante 90)",
+    "options": [
+      "Flash Streamer",
+      "Pré-dégivrage intelligent",
+      "Réseau Wi-Fi",
+      "Mode veille"
+    ],
+    "answer": "Pré-dégivrage intelligent"
+  },
+  {
+    "question": "À quoi correspond le SCOP ?",
+    "options": [
+      "Efficacité en mode froid",
+      "Efficacité annuelle en mode chaud",
+      "Puissance acoustique",
+      "Tension d’alimentation"
+    ],
+    "answer": "Efficacité annuelle en mode chaud"
+  },
+  {
+    "question": "Sensira est : (variante 70)",
+    "options": [
+      "Unité extérieure",
+      "Entrée de gamme Daikin",
+      "Console",
+      "Cassette"
+    ],
+    "answer": "Entrée de gamme Daikin"
+  },
+  {
+    "question": "Un SCOP élevé signifie : (variante 58)",
+    "options": [
+      "Moins performant",
+      "Plus bruyant",
+      "Plus économe en hiver",
+      "Inutile"
+    ],
+    "answer": "Plus économe en hiver"
+  },
+  {
+    "question": "Le SEER mesure : (variante 72)",
+    "options": [
+      "L'humidité",
+      "La consommation électrique",
+      "L'efficacité en mode froid",
+      "Le bruit"
+    ],
+    "answer": "L'efficacité en mode froid"
+  },
+  {
+    "question": "La gamme Comfora est plutôt : (variante 38)",
+    "options": [
+      "Haut de gamme",
+      "Moyenne gamme",
+      "Entrée de gamme",
+      "Industrie"
+    ],
+    "answer": "Entrée de gamme"
+  },
+  {
+    "question": "La gamme Comfora est plutôt : (variante 68)",
+    "options": [
+      "Haut de gamme",
+      "Moyenne gamme",
+      "Entrée de gamme",
+      "Industrie"
+    ],
+    "answer": "Entrée de gamme"
+  },
+  {
+    "question": "Que veut dire le code FTXM ?",
+    "options": [
+      "Gamme Stylish",
+      "Console murale",
+      "Unité murale Comfora",
+      "Cassette double flux"
+    ],
+    "answer": "Unité murale Comfora"
+  },
+  {
+    "question": "La gamme Comfora est plutôt : (variante 53)",
+    "options": [
+      "Haut de gamme",
+      "Moyenne gamme",
+      "Entrée de gamme",
+      "Industrie"
+    ],
+    "answer": "Entrée de gamme"
+  },
+  {
+    "question": "Que veut dire le code FTXM ? (variante 94)",
+    "options": [
+      "Gamme Stylish",
+      "Console murale",
+      "Unité murale Comfora",
+      "Cassette double flux"
+    ],
+    "answer": "Unité murale Comfora"
+  },
+  {
+    "question": "Quelle est la gamme entrée de gamme Daikin ? (variante 66)",
+    "options": [
+      "Stylish",
+      "Perfera",
+      "Comfora",
+      "Emura"
+    ],
+    "answer": "Comfora"
+  },
+  {
+    "question": "Quelle est la gamme entrée de gamme Daikin ? (variante 51)",
+    "options": [
+      "Stylish",
+      "Perfera",
+      "Comfora",
+      "Emura"
+    ],
+    "answer": "Comfora"
+  },
+  {
+    "question": "La référence RXJ correspond à quel type d’unité ? (variante 77)",
+    "options": [
+      "Unité extérieure",
+      "Unité intérieure murale",
+      "Gamme Altherma",
+      "Console double flux"
+    ],
+    "answer": "Unité extérieure"
+  },
+  {
+    "question": "Un SCOP élevé signifie : (variante 88)",
+    "options": [
+      "Moins performant",
+      "Plus bruyant",
+      "Plus économe en hiver",
+      "Inutile"
+    ],
+    "answer": "Plus économe en hiver"
+  },
+  {
+    "question": "Que veut dire le code FTXM ? (variante 34)",
+    "options": [
+      "Gamme Stylish",
+      "Console murale",
+      "Unité murale Comfora",
+      "Cassette double flux"
+    ],
+    "answer": "Unité murale Comfora"
+  },
+  {
+    "question": "Quelle est la gamme la plus design chez Daikin ? (variante 22)",
+    "options": [
+      "Perfera",
+      "Comfora",
+      "Stylish",
+      "Sensira"
+    ],
+    "answer": "Stylish"
+  },
+  {
+    "question": "Quelle est la gamme la plus design chez Daikin ?",
+    "options": [
+      "Perfera",
+      "Comfora",
+      "Stylish",
+      "Sensira"
+    ],
+    "answer": "Stylish"
+  },
+  {
+    "question": "Que signifie A+++ ? (variante 29)",
+    "options": [
+      "Classe de performance élevée",
+      "Produit entrée de gamme",
+      "Unité extérieure",
+      "Mode veille"
+    ],
+    "answer": "Classe de performance élevée"
+  },
+  {
+    "question": "À quoi correspond le SCOP ? (variante 56)",
+    "options": [
+      "Efficacité en mode froid",
+      "Efficacité annuelle en mode chaud",
+      "Puissance acoustique",
+      "Tension d’alimentation"
+    ],
+    "answer": "Efficacité annuelle en mode chaud"
+  },
+  {
+    "question": "Sensira est : (variante 25)",
+    "options": [
+      "Unité extérieure",
+      "Entrée de gamme Daikin",
+      "Console",
+      "Cassette"
+    ],
+    "answer": "Entrée de gamme Daikin"
+  },
+  {
+    "question": "La gamme Stylish correspond à quelle référence ? (variante 33)",
+    "options": [
+      "FTXM",
+      "FTXA",
+      "RXM",
+      "FVXM"
+    ],
+    "answer": "FTXA"
+  },
+  {
+    "question": "La référence FVXM correspond à :",
+    "options": [
+      "Cassette plafond",
+      "Console double flux",
+      "Unité extérieure",
+      "Murale design"
+    ],
+    "answer": "Console double flux"
+  },
+  {
+    "question": "À quoi correspond le SCOP ? (variante 26)",
+    "options": [
+      "Efficacité en mode froid",
+      "Efficacité annuelle en mode chaud",
+      "Puissance acoustique",
+      "Tension d’alimentation"
+    ],
+    "answer": "Efficacité annuelle en mode chaud"
+  },
+  {
+    "question": "La référence FVXM correspond à : (variante 20)",
+    "options": [
+      "Cassette plafond",
+      "Console double flux",
+      "Unité extérieure",
+      "Murale design"
+    ],
+    "answer": "Console double flux"
+  },
+  {
+    "question": "La référence RXJ correspond à quel type d’unité ? (variante 32)",
+    "options": [
+      "Unité extérieure",
+      "Unité intérieure murale",
+      "Gamme Altherma",
+      "Console double flux"
+    ],
+    "answer": "Unité extérieure"
+  },
+  {
+    "question": "La référence RXJ correspond à quel type d’unité ? (variante 17)",
+    "options": [
+      "Unité extérieure",
+      "Unité intérieure murale",
+      "Gamme Altherma",
+      "Console double flux"
+    ],
+    "answer": "Unité extérieure"
+  },
+  {
+    "question": "Sensira est : (variante 100)",
+    "options": [
+      "Unité extérieure",
+      "Entrée de gamme Daikin",
+      "Console",
+      "Cassette"
+    ],
+    "answer": "Entrée de gamme Daikin"
+  },
+  {
+    "question": "À quoi correspond le SCOP ? (variante 71)",
+    "options": [
+      "Efficacité en mode froid",
+      "Efficacité annuelle en mode chaud",
+      "Puissance acoustique",
+      "Tension d’alimentation"
+    ],
+    "answer": "Efficacité annuelle en mode chaud"
+  },
+  {
+    "question": "Quelle est la gamme entrée de gamme Daikin ?",
+    "options": [
+      "Stylish",
+      "Perfera",
+      "Comfora",
+      "Emura"
+    ],
+    "answer": "Comfora"
+  },
+  {
+    "question": "La gamme Stylish correspond à quelle référence ? (variante 18)",
+    "options": [
+      "FTXM",
+      "FTXA",
+      "RXM",
+      "FVXM"
+    ],
+    "answer": "FTXA"
+  },
+  {
+    "question": "Quel élément optimise l’efficacité en hiver ? (variante 30)",
+    "options": [
+      "Flash Streamer",
+      "Pré-dégivrage intelligent",
+      "Réseau Wi-Fi",
+      "Mode veille"
+    ],
+    "answer": "Pré-dégivrage intelligent"
+  },
+  {
+    "question": "Le SEER mesure : (variante 42)",
+    "options": [
+      "L'humidité",
+      "La consommation électrique",
+      "L'efficacité en mode froid",
+      "Le bruit"
+    ],
+    "answer": "L'efficacité en mode froid"
+  },
+  {
+    "question": "Emura est une gamme : (variante 24)",
+    "options": [
+      "Console",
+      "Murale haut de gamme",
+      "Gainable",
+      "Mobile"
+    ],
+    "answer": "Murale haut de gamme"
+  },
+  {
+    "question": "La référence FVXM correspond à : (variante 65)",
+    "options": [
+      "Cassette plafond",
+      "Console double flux",
+      "Unité extérieure",
+      "Murale design"
+    ],
+    "answer": "Console double flux"
+  },
+  {
+    "question": "Que signifie la lettre T dans une référence Daikin ? (variante 91)",
+    "options": [
+      "Unité murale",
+      "Console au sol",
+      "Technologie murale",
+      "Cassette plafond"
+    ],
+    "answer": "Unité murale"
+  },
+  {
+    "question": "La référence FVXM correspond à : (variante 35)",
+    "options": [
+      "Cassette plafond",
+      "Console double flux",
+      "Unité extérieure",
+      "Murale design"
+    ],
+    "answer": "Console double flux"
+  },
+  {
+    "question": "Un SCOP élevé signifie :",
+    "options": [
+      "Moins performant",
+      "Plus bruyant",
+      "Plus économe en hiver",
+      "Inutile"
+    ],
+    "answer": "Plus économe en hiver"
+  },
+  {
+    "question": "Que signifie la lettre T dans une référence Daikin ? (variante 31)",
+    "options": [
+      "Unité murale",
+      "Console au sol",
+      "Technologie murale",
+      "Cassette plafond"
+    ],
+    "answer": "Unité murale"
+  },
+  {
+    "question": "Le SEER mesure : (variante 57)",
+    "options": [
+      "L'humidité",
+      "La consommation électrique",
+      "L'efficacité en mode froid",
+      "Le bruit"
+    ],
+    "answer": "L'efficacité en mode froid"
+  },
+  {
+    "question": "Sensira est :",
+    "options": [
+      "Unité extérieure",
+      "Entrée de gamme Daikin",
+      "Console",
+      "Cassette"
+    ],
+    "answer": "Entrée de gamme Daikin"
+  },
+  {
+    "question": "Emura est une gamme : (variante 39)",
+    "options": [
+      "Console",
+      "Murale haut de gamme",
+      "Gainable",
+      "Mobile"
+    ],
+    "answer": "Murale haut de gamme"
+  },
+  {
+    "question": "Que veut dire le code FTXM ? (variante 64)",
+    "options": [
+      "Gamme Stylish",
+      "Console murale",
+      "Unité murale Comfora",
+      "Cassette double flux"
+    ],
+    "answer": "Unité murale Comfora"
+  },
+  {
+    "question": "Que veut dire le code FTXM ? (variante 19)",
+    "options": [
+      "Gamme Stylish",
+      "Console murale",
+      "Unité murale Comfora",
+      "Cassette double flux"
+    ],
+    "answer": "Unité murale Comfora"
+  },
+  {
+    "question": "Emura est une gamme : (variante 69)",
+    "options": [
+      "Console",
+      "Murale haut de gamme",
+      "Gainable",
+      "Mobile"
+    ],
+    "answer": "Murale haut de gamme"
+  },
+  {
+    "question": "Le SEER mesure :",
+    "options": [
+      "L'humidité",
+      "La consommation électrique",
+      "L'efficacité en mode froid",
+      "Le bruit"
+    ],
+    "answer": "L'efficacité en mode froid"
+  },
+  {
+    "question": "Que signifie la lettre T dans une référence Daikin ? (variante 76)",
+    "options": [
+      "Unité murale",
+      "Console au sol",
+      "Technologie murale",
+      "Cassette plafond"
+    ],
+    "answer": "Unité murale"
+  },
+  {
+    "question": "La référence RXJ correspond à quel type d’unité ? (variante 92)",
+    "options": [
+      "Unité extérieure",
+      "Unité intérieure murale",
+      "Gamme Altherma",
+      "Console double flux"
+    ],
+    "answer": "Unité extérieure"
+  },
+  {
+    "question": "La gamme Comfora est plutôt : (variante 83)",
+    "options": [
+      "Haut de gamme",
+      "Moyenne gamme",
+      "Entrée de gamme",
+      "Industrie"
+    ],
+    "answer": "Entrée de gamme"
+  },
+  {
+    "question": "Que signifie la lettre T dans une référence Daikin ?",
+    "options": [
+      "Unité murale",
+      "Console au sol",
+      "Technologie murale",
+      "Cassette plafond"
+    ],
+    "answer": "Unité murale"
+  },
+  {
+    "question": "Quelle est la gamme la plus design chez Daikin ? (variante 97)",
+    "options": [
+      "Perfera",
+      "Comfora",
+      "Stylish",
+      "Sensira"
+    ],
+    "answer": "Stylish"
+  },
+  {
+    "question": "Quelle est la gamme entrée de gamme Daikin ? (variante 96)",
+    "options": [
+      "Stylish",
+      "Perfera",
+      "Comfora",
+      "Emura"
+    ],
+    "answer": "Comfora"
+  },
+  {
+    "question": "Le SEER mesure : (variante 27)",
+    "options": [
+      "L'humidité",
+      "La consommation électrique",
+      "L'efficacité en mode froid",
+      "Le bruit"
+    ],
+    "answer": "L'efficacité en mode froid"
+  },
+  {
+    "question": "Quelle est la gamme entrée de gamme Daikin ? (variante 36)",
+    "options": [
+      "Stylish",
+      "Perfera",
+      "Comfora",
+      "Emura"
+    ],
+    "answer": "Comfora"
+  },
+  {
+    "question": "Quel élément optimise l’efficacité en hiver ?",
+    "options": [
+      "Flash Streamer",
+      "Pré-dégivrage intelligent",
+      "Réseau Wi-Fi",
+      "Mode veille"
+    ],
+    "answer": "Pré-dégivrage intelligent"
+  },
+  {
+    "question": "Un SCOP élevé signifie : (variante 43)",
+    "options": [
+      "Moins performant",
+      "Plus bruyant",
+      "Plus économe en hiver",
+      "Inutile"
+    ],
+    "answer": "Plus économe en hiver"
+  },
+  {
+    "question": "La gamme Stylish correspond à quelle référence ? (variante 63)",
+    "options": [
+      "FTXM",
+      "FTXA",
+      "RXM",
+      "FVXM"
+    ],
+    "answer": "FTXA"
+  },
+  {
+    "question": "Emura est une gamme :",
+    "options": [
+      "Console",
+      "Murale haut de gamme",
+      "Gainable",
+      "Mobile"
+    ],
+    "answer": "Murale haut de gamme"
+  },
+  {
+    "question": "Quel élément optimise l’efficacité en hiver ? (variante 60)",
+    "options": [
+      "Flash Streamer",
+      "Pré-dégivrage intelligent",
+      "Réseau Wi-Fi",
+      "Mode veille"
+    ],
+    "answer": "Pré-dégivrage intelligent"
+  },
+  {
+    "question": "La référence FVXM correspond à : (variante 50)",
+    "options": [
+      "Cassette plafond",
+      "Console double flux",
+      "Unité extérieure",
+      "Murale design"
+    ],
+    "answer": "Console double flux"
+  },
+  {
+    "question": "Que signifie la lettre T dans une référence Daikin ? (variante 61)",
+    "options": [
+      "Unité murale",
+      "Console au sol",
+      "Technologie murale",
+      "Cassette plafond"
+    ],
+    "answer": "Unité murale"
+  },
+  {
+    "question": "Que signifie la lettre T dans une référence Daikin ? (variante 16)",
+    "options": [
+      "Unité murale",
+      "Console au sol",
+      "Technologie murale",
+      "Cassette plafond"
+    ],
+    "answer": "Unité murale"
+  },
+  {
+    "question": "La gamme Comfora est plutôt : (variante 98)",
+    "options": [
+      "Haut de gamme",
+      "Moyenne gamme",
+      "Entrée de gamme",
+      "Industrie"
+    ],
+    "answer": "Entrée de gamme"
+  },
+  {
+    "question": "Quelle est la gamme entrée de gamme Daikin ? (variante 81)",
+    "options": [
+      "Stylish",
+      "Perfera",
+      "Comfora",
+      "Emura"
+    ],
+    "answer": "Comfora"
+  },
+  {
+    "question": "À quoi correspond le SCOP ? (variante 41)",
+    "options": [
+      "Efficacité en mode froid",
+      "Efficacité annuelle en mode chaud",
+      "Puissance acoustique",
+      "Tension d’alimentation"
+    ],
+    "answer": "Efficacité annuelle en mode chaud"
+  }
+];
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    let currentIndex = 0;
+    let currentScore = 0;
+    let selectedQuestions = [];
+
+    const startBtn = document.getElementById('start-btn');
+    const quizBox = document.getElementById('quiz-box');
+    const questionText = document.getElementById('question-text');
+    const choicesBox = document.getElementById('choices');
+    const nextButton = document.getElementById('next-button');
+    const resultBox = document.getElementById('result');
+
+    startBtn.addEventListener('click', () => {
+      startBtn.classList.add('hidden');
+      quizBox.classList.remove('hidden');
+      resultBox.classList.add('hidden');
+      currentIndex = 0;
+      currentScore = 0;
+      selectedQuestions = shuffle([...allQuestions]).slice(0, 10);
+      showQuestion();
+    });
+
+    nextButton.addEventListener('click', () => {
+      currentIndex++;
+      if (currentIndex < selectedQuestions.length) {
+        showQuestion();
+      } else {
+        showResult();
+      }
+    });
+
+    function showQuestion() {
+      const current = selectedQuestions[currentIndex];
+      questionText.innerText = `Q${currentIndex + 1}. ${current.question}`;
+      choicesBox.innerHTML = '';
+      nextButton.classList.add('hidden');
+
+      shuffle([...current.options]).forEach(choice => {
+        const btn = document.createElement('button');
+        btn.innerText = choice;
+        btn.addEventListener('click', () => selectAnswer(btn, current.answer));
+        choicesBox.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(button, correctAnswer) {
+      const buttons = choicesBox.querySelectorAll('button');
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.innerText === correctAnswer) {
+          btn.classList.add('correct');
+        } else {
+          btn.classList.add('incorrect');
+        }
+      });
+      if (button.innerText === correctAnswer) {
+        currentScore++;
+      }
+      nextButton.classList.remove('hidden');
+    }
+
+    function showResult() {
+      quizBox.classList.add('hidden');
+      resultBox.classList.remove('hidden');
+      resultBox.innerHTML = `<h2>Votre score : ${currentScore} / ${selectedQuestions.length}</h2>` +
+                            `<p>${currentScore >= 8 ? "🌟 Excellent travail !" : currentScore >= 5 ? "💪 Pas mal, continuez !" : "📘 Besoin de réviser un peu 😅"}</p>`;
+      startBtn.innerText = "Rejouer";
+      startBtn.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
