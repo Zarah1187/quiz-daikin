@@ -1,0 +1,634 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Daikin Références</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #eaf3fa;
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+header img {
+    height: 50px;
+    margin-right: 15px;
+}
+h1 {
+    color: #0072CE;
+    font-size: 24px;
+}
+.choice {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #e9e9e9;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+.choice.correct {
+    background-color: #d4edda;
+    border-color: #28a745;
+}
+.choice.incorrect {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+}
+button {
+    background-color: #0072CE;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+</style>
+</head>
+<body>
+<header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Daikin_Industries_logo.svg/2560px-Daikin_Industries_logo.svg.png" alt="Daikin Logo">
+    <h1>Quiz Daikin : Références PAC Air-Air</h1>
+</header>
+<div id="quiz-container"></div>
+<script>
+const allQuestions = [
+{
+        question: "La référence RXJ est associée à quelle unité ?",
+        choices: ['Emura', 'Ururu Sarara', 'Stylish'],
+        answer: "Ururu Sarara"
+    },
+{
+        question: "Que signifie le 'A' à la fin de FTXA20AW ?",
+        choices: ['Ancienne génération', 'Haute puissance', 'Console'],
+        answer: "Ancienne génération"
+    },
+{
+        question: "À quelle unité correspond FTXM35R ?",
+        choices: ['Perfera', 'Comfora', 'Stylish'],
+        answer: "Perfera"
+    },
+{
+        question: "La gamme Emura correspond à quelle référence extérieure ?",
+        choices: ['RXJ', 'RXZ', 'RXJ'],
+        answer: "RXJ"
+    },
+{
+        question: "FVXM35A est une unité de quel type ?",
+        choices: ['Console', 'Murale', 'Plafonnier'],
+        answer: "Console"
+    },
+{
+        question: "FTXA20AW fait partie de quelle gamme ?",
+        choices: ['Stylish', 'Comfora', 'Optimized Heating'],
+        answer: "Stylish"
+    },
+{
+        question: "La référence RXM50T correspond à quelle gamme ?",
+        choices: ['Optimized Heating', 'Comfora', 'Stylish'],
+        answer: "Optimized Heating"
+    },
+{
+        question: "Quelle est la puissance nominale (kW) de FTXA35 ?",
+        choices: ['3.5 kW', '2.0 kW', '5.0 kW'],
+        answer: "3.5 kW"
+    },
+{
+        question: "Que signifie le 'T' dans RXM50T ?",
+        choices: ['Nouvelle génération', 'Troisième génération', 'Télécommande'],
+        answer: "Troisième génération"
+    },
+{
+        question: "La référence RXC est associée à quelle unité ?",
+        choices: ['Comfora', 'Perfera', 'Stylish'],
+        answer: "Comfora"
+    },
+{
+        question: "La référence RXJ est associée à quelle unité ?",
+        choices: ['Emura', 'Ururu Sarara', 'Stylish'],
+        answer: "Ururu Sarara"
+    },
+{
+        question: "Que signifie le 'A' à la fin de FTXA20AW ?",
+        choices: ['Ancienne génération', 'Haute puissance', 'Console'],
+        answer: "Ancienne génération"
+    },
+{
+        question: "À quelle unité correspond FTXM35R ?",
+        choices: ['Perfera', 'Comfora', 'Stylish'],
+        answer: "Perfera"
+    },
+{
+        question: "La gamme Emura correspond à quelle référence extérieure ?",
+        choices: ['RXJ', 'RXZ', 'RXJ'],
+        answer: "RXJ"
+    },
+{
+        question: "FVXM35A est une unité de quel type ?",
+        choices: ['Console', 'Murale', 'Plafonnier'],
+        answer: "Console"
+    },
+{
+        question: "FTXA20AW fait partie de quelle gamme ?",
+        choices: ['Stylish', 'Comfora', 'Optimized Heating'],
+        answer: "Stylish"
+    },
+{
+        question: "La référence RXM50T correspond à quelle gamme ?",
+        choices: ['Optimized Heating', 'Comfora', 'Stylish'],
+        answer: "Optimized Heating"
+    },
+{
+        question: "Quelle est la puissance nominale (kW) de FTXA35 ?",
+        choices: ['3.5 kW', '2.0 kW', '5.0 kW'],
+        answer: "3.5 kW"
+    },
+{
+        question: "Que signifie le 'T' dans RXM50T ?",
+        choices: ['Nouvelle génération', 'Troisième génération', 'Télécommande'],
+        answer: "Troisième génération"
+    },
+{
+        question: "La référence RXC est associée à quelle unité ?",
+        choices: ['Comfora', 'Perfera', 'Stylish'],
+        answer: "Comfora"
+    },
+{
+        question: "La référence RXJ est associée à quelle unité ?",
+        choices: ['Emura', 'Ururu Sarara', 'Stylish'],
+        answer: "Ururu Sarara"
+    },
+{
+        question: "Que signifie le 'A' à la fin de FTXA20AW ?",
+        choices: ['Ancienne génération', 'Haute puissance', 'Console'],
+        answer: "Ancienne génération"
+    },
+{
+        question: "À quelle unité correspond FTXM35R ?",
+        choices: ['Perfera', 'Comfora', 'Stylish'],
+        answer: "Perfera"
+    },
+{
+        question: "La gamme Emura correspond à quelle référence extérieure ?",
+        choices: ['RXJ', 'RXZ', 'RXJ'],
+        answer: "RXJ"
+    },
+{
+        question: "FVXM35A est une unité de quel type ?",
+        choices: ['Console', 'Murale', 'Plafonnier'],
+        answer: "Console"
+    },
+{
+        question: "FTXA20AW fait partie de quelle gamme ?",
+        choices: ['Stylish', 'Comfora', 'Optimized Heating'],
+        answer: "Stylish"
+    },
+{
+        question: "La référence RXM50T correspond à quelle gamme ?",
+        choices: ['Optimized Heating', 'Comfora', 'Stylish'],
+        answer: "Optimized Heating"
+    },
+{
+        question: "Quelle est la puissance nominale (kW) de FTXA35 ?",
+        choices: ['3.5 kW', '2.0 kW', '5.0 kW'],
+        answer: "3.5 kW"
+    },
+{
+        question: "Que signifie le 'T' dans RXM50T ?",
+        choices: ['Nouvelle génération', 'Troisième génération', 'Télécommande'],
+        answer: "Troisième génération"
+    },
+{
+        question: "La référence RXC est associée à quelle unité ?",
+        choices: ['Comfora', 'Perfera', 'Stylish'],
+        answer: "Comfora"
+    },
+{
+        question: "La référence RXJ est associée à quelle unité ?",
+        choices: ['Emura', 'Ururu Sarara', 'Stylish'],
+        answer: "Ururu Sarara"
+    },
+{
+        question: "Que signifie le 'A' à la fin de FTXA20AW ?",
+        choices: ['Ancienne génération', 'Haute puissance', 'Console'],
+        answer: "Ancienne génération"
+    },
+{
+        question: "À quelle unité correspond FTXM35R ?",
+        choices: ['Perfera', 'Comfora', 'Stylish'],
+        answer: "Perfera"
+    },
+{
+        question: "La gamme Emura correspond à quelle référence extérieure ?",
+        choices: ['RXJ', 'RXZ', 'RXJ'],
+        answer: "RXJ"
+    },
+{
+        question: "FVXM35A est une unité de quel type ?",
+        choices: ['Console', 'Murale', 'Plafonnier'],
+        answer: "Console"
+    },
+{
+        question: "FTXA20AW fait partie de quelle gamme ?",
+        choices: ['Stylish', 'Comfora', 'Optimized Heating'],
+        answer: "Stylish"
+    },
+{
+        question: "La référence RXM50T correspond à quelle gamme ?",
+        choices: ['Optimized Heating', 'Comfora', 'Stylish'],
+        answer: "Optimized Heating"
+    },
+{
+        question: "Quelle est la puissance nominale (kW) de FTXA35 ?",
+        choices: ['3.5 kW', '2.0 kW', '5.0 kW'],
+        answer: "3.5 kW"
+    },
+{
+        question: "Que signifie le 'T' dans RXM50T ?",
+        choices: ['Nouvelle génération', 'Troisième génération', 'Télécommande'],
+        answer: "Troisième génération"
+    },
+{
+        question: "La référence RXC est associée à quelle unité ?",
+        choices: ['Comfora', 'Perfera', 'Stylish'],
+        answer: "Comfora"
+    },
+{
+        question: "La référence RXJ est associée à quelle unité ?",
+        choices: ['Emura', 'Ururu Sarara', 'Stylish'],
+        answer: "Ururu Sarara"
+    },
+{
+        question: "Que signifie le 'A' à la fin de FTXA20AW ?",
+        choices: ['Ancienne génération', 'Haute puissance', 'Console'],
+        answer: "Ancienne génération"
+    },
+{
+        question: "À quelle unité correspond FTXM35R ?",
+        choices: ['Perfera', 'Comfora', 'Stylish'],
+        answer: "Perfera"
+    },
+{
+        question: "La gamme Emura correspond à quelle référence extérieure ?",
+        choices: ['RXJ', 'RXZ', 'RXJ'],
+        answer: "RXJ"
+    },
+{
+        question: "FVXM35A est une unité de quel type ?",
+        choices: ['Console', 'Murale', 'Plafonnier'],
+        answer: "Console"
+    },
+{
+        question: "FTXA20AW fait partie de quelle gamme ?",
+        choices: ['Stylish', 'Comfora', 'Optimized Heating'],
+        answer: "Stylish"
+    },
+{
+        question: "La référence RXM50T correspond à quelle gamme ?",
+        choices: ['Optimized Heating', 'Comfora', 'Stylish'],
+        answer: "Optimized Heating"
+    },
+{
+        question: "Quelle est la puissance nominale (kW) de FTXA35 ?",
+        choices: ['3.5 kW', '2.0 kW', '5.0 kW'],
+        answer: "3.5 kW"
+    },
+{
+        question: "Que signifie le 'T' dans RXM50T ?",
+        choices: ['Nouvelle génération', 'Troisième génération', 'Télécommande'],
+        answer: "Troisième génération"
+    },
+{
+        question: "La référence RXC est associée à quelle unité ?",
+        choices: ['Comfora', 'Perfera', 'Stylish'],
+        answer: "Comfora"
+    },
+{
+        question: "La référence RXJ est associée à quelle unité ?",
+        choices: ['Emura', 'Ururu Sarara', 'Stylish'],
+        answer: "Ururu Sarara"
+    },
+{
+        question: "Que signifie le 'A' à la fin de FTXA20AW ?",
+        choices: ['Ancienne génération', 'Haute puissance', 'Console'],
+        answer: "Ancienne génération"
+    },
+{
+        question: "À quelle unité correspond FTXM35R ?",
+        choices: ['Perfera', 'Comfora', 'Stylish'],
+        answer: "Perfera"
+    },
+{
+        question: "La gamme Emura correspond à quelle référence extérieure ?",
+        choices: ['RXJ', 'RXZ', 'RXJ'],
+        answer: "RXJ"
+    },
+{
+        question: "FVXM35A est une unité de quel type ?",
+        choices: ['Console', 'Murale', 'Plafonnier'],
+        answer: "Console"
+    },
+{
+        question: "FTXA20AW fait partie de quelle gamme ?",
+        choices: ['Stylish', 'Comfora', 'Optimized Heating'],
+        answer: "Stylish"
+    },
+{
+        question: "La référence RXM50T correspond à quelle gamme ?",
+        choices: ['Optimized Heating', 'Comfora', 'Stylish'],
+        answer: "Optimized Heating"
+    },
+{
+        question: "Quelle est la puissance nominale (kW) de FTXA35 ?",
+        choices: ['3.5 kW', '2.0 kW', '5.0 kW'],
+        answer: "3.5 kW"
+    },
+{
+        question: "Que signifie le 'T' dans RXM50T ?",
+        choices: ['Nouvelle génération', 'Troisième génération', 'Télécommande'],
+        answer: "Troisième génération"
+    },
+{
+        question: "La référence RXC est associée à quelle unité ?",
+        choices: ['Comfora', 'Perfera', 'Stylish'],
+        answer: "Comfora"
+    },
+{
+        question: "La référence RXJ est associée à quelle unité ?",
+        choices: ['Emura', 'Ururu Sarara', 'Stylish'],
+        answer: "Ururu Sarara"
+    },
+{
+        question: "Que signifie le 'A' à la fin de FTXA20AW ?",
+        choices: ['Ancienne génération', 'Haute puissance', 'Console'],
+        answer: "Ancienne génération"
+    },
+{
+        question: "À quelle unité correspond FTXM35R ?",
+        choices: ['Perfera', 'Comfora', 'Stylish'],
+        answer: "Perfera"
+    },
+{
+        question: "La gamme Emura correspond à quelle référence extérieure ?",
+        choices: ['RXJ', 'RXZ', 'RXJ'],
+        answer: "RXJ"
+    },
+{
+        question: "FVXM35A est une unité de quel type ?",
+        choices: ['Console', 'Murale', 'Plafonnier'],
+        answer: "Console"
+    },
+{
+        question: "FTXA20AW fait partie de quelle gamme ?",
+        choices: ['Stylish', 'Comfora', 'Optimized Heating'],
+        answer: "Stylish"
+    },
+{
+        question: "La référence RXM50T correspond à quelle gamme ?",
+        choices: ['Optimized Heating', 'Comfora', 'Stylish'],
+        answer: "Optimized Heating"
+    },
+{
+        question: "Quelle est la puissance nominale (kW) de FTXA35 ?",
+        choices: ['3.5 kW', '2.0 kW', '5.0 kW'],
+        answer: "3.5 kW"
+    },
+{
+        question: "Que signifie le 'T' dans RXM50T ?",
+        choices: ['Nouvelle génération', 'Troisième génération', 'Télécommande'],
+        answer: "Troisième génération"
+    },
+{
+        question: "La référence RXC est associée à quelle unité ?",
+        choices: ['Comfora', 'Perfera', 'Stylish'],
+        answer: "Comfora"
+    },
+{
+        question: "La référence RXJ est associée à quelle unité ?",
+        choices: ['Emura', 'Ururu Sarara', 'Stylish'],
+        answer: "Ururu Sarara"
+    },
+{
+        question: "Que signifie le 'A' à la fin de FTXA20AW ?",
+        choices: ['Ancienne génération', 'Haute puissance', 'Console'],
+        answer: "Ancienne génération"
+    },
+{
+        question: "À quelle unité correspond FTXM35R ?",
+        choices: ['Perfera', 'Comfora', 'Stylish'],
+        answer: "Perfera"
+    },
+{
+        question: "La gamme Emura correspond à quelle référence extérieure ?",
+        choices: ['RXJ', 'RXZ', 'RXJ'],
+        answer: "RXJ"
+    },
+{
+        question: "FVXM35A est une unité de quel type ?",
+        choices: ['Console', 'Murale', 'Plafonnier'],
+        answer: "Console"
+    },
+{
+        question: "FTXA20AW fait partie de quelle gamme ?",
+        choices: ['Stylish', 'Comfora', 'Optimized Heating'],
+        answer: "Stylish"
+    },
+{
+        question: "La référence RXM50T correspond à quelle gamme ?",
+        choices: ['Optimized Heating', 'Comfora', 'Stylish'],
+        answer: "Optimized Heating"
+    },
+{
+        question: "Quelle est la puissance nominale (kW) de FTXA35 ?",
+        choices: ['3.5 kW', '2.0 kW', '5.0 kW'],
+        answer: "3.5 kW"
+    },
+{
+        question: "Que signifie le 'T' dans RXM50T ?",
+        choices: ['Nouvelle génération', 'Troisième génération', 'Télécommande'],
+        answer: "Troisième génération"
+    },
+{
+        question: "La référence RXC est associée à quelle unité ?",
+        choices: ['Comfora', 'Perfera', 'Stylish'],
+        answer: "Comfora"
+    },
+{
+        question: "La référence RXJ est associée à quelle unité ?",
+        choices: ['Emura', 'Ururu Sarara', 'Stylish'],
+        answer: "Ururu Sarara"
+    },
+{
+        question: "Que signifie le 'A' à la fin de FTXA20AW ?",
+        choices: ['Ancienne génération', 'Haute puissance', 'Console'],
+        answer: "Ancienne génération"
+    },
+{
+        question: "À quelle unité correspond FTXM35R ?",
+        choices: ['Perfera', 'Comfora', 'Stylish'],
+        answer: "Perfera"
+    },
+{
+        question: "La gamme Emura correspond à quelle référence extérieure ?",
+        choices: ['RXJ', 'RXZ', 'RXJ'],
+        answer: "RXJ"
+    },
+{
+        question: "FVXM35A est une unité de quel type ?",
+        choices: ['Console', 'Murale', 'Plafonnier'],
+        answer: "Console"
+    },
+{
+        question: "FTXA20AW fait partie de quelle gamme ?",
+        choices: ['Stylish', 'Comfora', 'Optimized Heating'],
+        answer: "Stylish"
+    },
+{
+        question: "La référence RXM50T correspond à quelle gamme ?",
+        choices: ['Optimized Heating', 'Comfora', 'Stylish'],
+        answer: "Optimized Heating"
+    },
+{
+        question: "Quelle est la puissance nominale (kW) de FTXA35 ?",
+        choices: ['3.5 kW', '2.0 kW', '5.0 kW'],
+        answer: "3.5 kW"
+    },
+{
+        question: "Que signifie le 'T' dans RXM50T ?",
+        choices: ['Nouvelle génération', 'Troisième génération', 'Télécommande'],
+        answer: "Troisième génération"
+    },
+{
+        question: "La référence RXC est associée à quelle unité ?",
+        choices: ['Comfora', 'Perfera', 'Stylish'],
+        answer: "Comfora"
+    },
+{
+        question: "La référence RXJ est associée à quelle unité ?",
+        choices: ['Emura', 'Ururu Sarara', 'Stylish'],
+        answer: "Ururu Sarara"
+    },
+{
+        question: "Que signifie le 'A' à la fin de FTXA20AW ?",
+        choices: ['Ancienne génération', 'Haute puissance', 'Console'],
+        answer: "Ancienne génération"
+    },
+{
+        question: "À quelle unité correspond FTXM35R ?",
+        choices: ['Perfera', 'Comfora', 'Stylish'],
+        answer: "Perfera"
+    },
+{
+        question: "La gamme Emura correspond à quelle référence extérieure ?",
+        choices: ['RXJ', 'RXZ', 'RXJ'],
+        answer: "RXJ"
+    },
+{
+        question: "FVXM35A est une unité de quel type ?",
+        choices: ['Console', 'Murale', 'Plafonnier'],
+        answer: "Console"
+    },
+{
+        question: "FTXA20AW fait partie de quelle gamme ?",
+        choices: ['Stylish', 'Comfora', 'Optimized Heating'],
+        answer: "Stylish"
+    },
+{
+        question: "La référence RXM50T correspond à quelle gamme ?",
+        choices: ['Optimized Heating', 'Comfora', 'Stylish'],
+        answer: "Optimized Heating"
+    },
+{
+        question: "Quelle est la puissance nominale (kW) de FTXA35 ?",
+        choices: ['3.5 kW', '2.0 kW', '5.0 kW'],
+        answer: "3.5 kW"
+    },
+{
+        question: "Que signifie le 'T' dans RXM50T ?",
+        choices: ['Nouvelle génération', 'Troisième génération', 'Télécommande'],
+        answer: "Troisième génération"
+    },
+{
+        question: "La référence RXC est associée à quelle unité ?",
+        choices: ['Comfora', 'Perfera', 'Stylish'],
+        answer: "Comfora"
+    }
+];
+
+let currentQuestion = 0;
+let selectedQuestions = [];
+
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function loadQuestion() {
+    const container = document.getElementById("quiz-container");
+    container.innerHTML = "";
+    const q = selectedQuestions[currentQuestion];
+
+    const title = document.createElement("h2");
+    title.textContent = (currentQuestion + 1) + ". " + q.question;
+    container.appendChild(title);
+
+    q.choices.forEach(choice => {
+        const btn = document.createElement("div");
+        btn.className = "choice";
+        btn.textContent = choice;
+        btn.onclick = () => {
+            if (btn.classList.contains("correct") || btn.classList.contains("incorrect")) return;
+            if (choice === q.answer) {
+                btn.classList.add("correct");
+            } else {
+                btn.classList.add("incorrect");
+                const correctBtn = [...container.children].find(el => el.textContent === q.answer);
+                if (correctBtn && correctBtn.classList.contains("choice")) {
+                    correctBtn.classList.add("correct");
+                }
+            }
+        };
+        container.appendChild(btn);
+    });
+
+    const nextBtn = document.createElement("button");
+    nextBtn.textContent = (currentQuestion < 9) ? "Suivant" : "Terminer le quiz";
+    nextBtn.onclick = () => {
+        currentQuestion++;
+        if (currentQuestion < 10) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    };
+    container.appendChild(nextBtn);
+}
+
+function showResult() {
+    const container = document.getElementById("quiz-container");
+    container.innerHTML = "<h2>🎉 Bravo ! Tu as terminé le quiz.</h2><button onclick='startQuiz()'>Recommencer</button>";
+}
+
+function startQuiz() {
+    currentQuestion = 0;
+    selectedQuestions = [...allQuestions];
+    shuffle(selectedQuestions);
+    selectedQuestions = selectedQuestions.slice(0, 10);
+    loadQuestion();
+}
+
+startQuiz();
+</script>
+</body>
+</html>
