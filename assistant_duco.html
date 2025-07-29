@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Assistant DucoBox Energy Comfort</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f8f9fa; padding: 20px; }
+    h1 { color: #005caa; }
+    .container { max-width: 700px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    #question { width: 100%; padding: 10px; font-size: 1rem; }
+    #answer { margin-top: 15px; white-space: pre-wrap; }
+    button { margin-top: 10px; padding: 8px 12px; font-size: 1rem; background-color: #005caa; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background-color: #004a8a; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Assistant DucoBox Energy Comfort</h1>
+    <p>Posez une question concernant les modèles DucoBox Energy Comfort D325 FR ou D325. Tapez votre question ci‑dessous et appuyez sur « Répondre ». Pour effacer la conversation, rafraîchissez la page.</p>
+    <input type="text" id="question" placeholder="Votre question..." />
+    <button onclick="answerQuestion()">Répondre</button>
+    <div id="answer"></div>
+  </div>
+
+  <script>
+    // Base de connaissances sous forme de tableau d'objets.
+    const knowledgeBase = [
+      {
+        keywords: ["qu’est", "qu'est-ce", "présentation", "ducobox", "d325 fr", "d325"],
+        response: "La DucoBox Energy Comfort D325 FR est une unité de ventilation double flux compacte et légère (21 kg). Elle est destinée aux logements individuels ou collectifs du T2 au T5. Grâce à des ventilateurs performants et un échangeur de chaleur à contre‑courant, elle récupère jusqu’à 94 % de la chaleur de l’air extrait tout en consommant très peu d’électricité. Un logiciel intégré permet à l’installateur de choisir le type de logement pour calibrer automatiquement les débits nécessaires."
+      },
+      {
+        keywords: ["dimensions", "taille", "poids", "mesure", "dimension"],
+        response: "Le caisson mesure environ 700 × 705 × 525 mm et pèse 21 kg. Cette compacité permet une installation aisée par une seule personne et réduit l’encombrement dans le local technique."
+      },
+      {
+        keywords: ["débit", "m3", "m³"],
+        response: "Le modèle D325 FR peut fournir jusqu’à 325 m³/h d’air neuf à une perte de charge de 150 Pa. Le débit réel est ajusté par logiciel en fonction de la typologie de l’habitation pour optimiser la consommation énergétique."
+      },
+      {
+        keywords: ["rendement", "efficacité", "échangeur", "performance", "récupération"],
+        response: "L’échangeur de chaleur de la DucoBox Energy Comfort atteint une efficacité de récupération de chaleur jusqu’à 94 %. La certification NF garantit un rendement minimal de 88 %. Ce haut rendement réduit les besoins en chauffage et en climatisation."
+      },
+      {
+        keywords: ["consommation", "puissance", "énergie", "classe", "énergétique"],
+        response: "La consommation électrique de l’unité varie entre 16,2 W et 37,7 W selon le débit et les conditions de fonctionnement. Grâce à cette faible consommation, la DucoBox Energy Comfort D325 FR bénéficie de la classe énergétique A."
+      },
+      {
+        keywords: ["filtre", "filtres", "filtration"],
+        response: "Deux filtres dynamiques sont fournis : un filtre F7 (ISO ePM1 60 %) pour l’air soufflé et un filtre G4 (ISO Coarse 55 %) pour l’air extrait. Ils assurent une bonne qualité d’air et protègent l’échangeur de chaleur."
+      },
+      {
+        keywords: ["fonction", "régulation", "intelligente", "by", "bypass", "antigel", "smart", "logique"],
+        response: "L’appareil intègre des fonctions intelligentes : régulation à débit constant malgré l’encrassement des filtres, by‑pass modulant pour le free cooling en été, protection antigel en hiver et bascule gauche/droite via un double by‑pass breveté. Le logiciel de calibration sélectionne le type de logement et ajuste automatiquement les débits."
+      },
+      {
+        keywords: ["différence", "hy", "co2", "version", "variant"],
+        response: "La version D325 FR fonctionne à débit constant et est certifiée NF. La version D325 HY/CO₂ utilise des capteurs d’humidité et de CO₂ et pilote des vannes multi‑zones pour moduler les débits. Elle permet jusqu’à 40 % d’économies d’énergie et une réduction sonore d’environ 30 %."
+      },
+      {
+        keywords: ["standard", "livré", "kit", "composant", "contenu", "base"],
+        response: "Le kit de base comprend l’unité de ventilation, un support mural, deux filtres (F7 et G4), un siphon de condensats et la notice d’installation."
+      },
+      {
+        keywords: ["accessoire", "option", "optionnel", "accessoires"],
+        response: "Les accessoires optionnels incluent : siphon plat, carte Connectivity Board pour la domotique, capteur d’humidité, chaises de fixation pour la pose au sol, vannes multi‑zones, pré‑chauffeur électrique et pièces de connexion pour différents diamètres de conduits."
+      },
+      {
+        keywords: ["installer", "installation", "montage", "pose"],
+        response: "Pour installer la DucoBox, prévoyez un espace de 60 à 100 cm devant l’appareil. Fixez‑la sur un mur porteur ou utilisez des chaises de fixation. Raccordez les conduits en suivant les repères ODA, SUP, ETA et EHA. Montez ensuite les accessoires (siphon, vannes, capteurs, pré‑chauffeur) et lancez l’auto‑calibration via l’application DUCO."
+      },
+      {
+        keywords: ["dimensionner", "conduit", "diamètre", "réseau", "pression"],
+        response: "Pour un fonctionnement optimal, limitez la perte de charge à 150 Pa et la vitesse de l’air à 3 m/s. Utilisez des conduits adaptés : 100 mm pour 0–30 m³/h, 125 mm pour 30–150 m³/h, 160 mm pour 150–250 m³/h, 180 mm pour 250–350 m³/h et 200 mm pour 350–550 m³/h."
+      },
+      {
+        keywords: ["multi", "zone", "multi-zone", "vannes", "vanne"],
+        response: "Les clapets multi‑zones se placent sur les conduits de soufflage et modulent les débits pièce par pièce. Jusqu’à quatre vannes peuvent être commandées via des capteurs de CO₂ ou d’humidité pour optimiser la ventilation et réduire la consommation d’énergie."
+      },
+      {
+        keywords: ["connectivité", "connectique", "domotique", "modbus", "api"],
+        response: "La carte Connectivity Board permet de connecter la DucoBox via REST API ou Modbus TCP en Ethernet ou Wi‑Fi. On peut ainsi la piloter et la surveiller à distance via l’application DUCO et l’intégrer à un système de domotique."
+      },
+      {
+        keywords: ["certification", "classe", "norme", "nf", "ip"],
+        response: "La DucoBox Energy Comfort D325 FR est certifiée NF avec un rendement minimal de 88 % et possède la classe énergétique A. Ses filtres sont conformes à la norme ISO 16890 et l’ensemble bénéficie d’une protection IP40."
+      },
+      {
+        keywords: ["bénéfice", "avantage", "utilisateur", "gain", "santé"],
+        response: "Cette ventilation récupère la chaleur pour réduire les dépenses de chauffage et de climatisation. Elle assure un air intérieur sain en éliminant l’humidité et les polluants, et reste silencieuse et fiable. La version HY/CO₂ renforce ces bénéfices grâce à la modulation des débits."
+      },
+      {
+        keywords: ["maintenance", "entretien", "changer", "service", "filtre"],
+        response: "Les filtres F7 et G4 doivent être remplacés régulièrement (au moins deux fois par an pour le F7). Il convient aussi de vérifier le siphon, de nettoyer les conduits et d’effectuer un entretien annuel par un professionnel pour garantir la performance et la longévité de l’appareil."
+      },
+      {
+        keywords: ["logement", "t2", "t3", "t4", "t5", "appartement", "maison"],
+        response: "Le modèle D325 FR convient aux logements T2 à T5, qu’il s’agisse d’appartements ou de maisons. Le logiciel interne ajuste les débits selon la configuration pour assurer une ventilation optimale."
+      },
+      {
+        keywords: ["bruit", "silencieux", "niveau sonore", "db"],
+        response: "La DucoBox Energy Comfort est conçue pour fonctionner silencieusement grâce à des ventilateurs performants et un caisson isolé. La version HY/CO₂ est environ 30 % plus silencieuse en modulant les débits."
+      },
+      {
+        keywords: ["free", "cooling", "bypass", "rafraîchir", "free-cooling"],
+        response: "Un by‑pass modulant permet de contourner l’échangeur lorsque la température extérieure est plus basse que celle intérieure. Cela offre un rafraîchissement naturel en été, sans échange de chaleur, améliorant le confort nocturne."
+      }
+    ];
+
+    function answerQuestion() {
+      const questionInput = document.getElementById('question');
+      const answerDiv = document.getElementById('answer');
+      const question = questionInput.value.trim().toLowerCase();
+      if (!question) {
+        answerDiv.textContent = 'Veuillez saisir une question.';
+        return;
+      }
+      let found = false;
+      for (const entry of knowledgeBase) {
+        for (const keyword of entry.keywords) {
+          if (question.includes(keyword)) {
+            answerDiv.textContent = entry.response;
+            found = true;
+            break;
+          }
+        }
+        if (found) break;
+      }
+      if (!found) {
+        answerDiv.textContent = "Je n'ai pas cette information. Veuillez reformuler ou consulter la documentation technique.";
+      }
+    }
+  </script>
+</body>
+</html>
