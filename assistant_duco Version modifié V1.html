@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  
+  <style>
+    
+    body {
+      font-family: Arial, sans-serif;
+      background: #F5F8FA;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 100%;
+      background: #FFFFFF;
+      padding: 40px;
+      box-sizing: border-box;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+    h1 {
+      color: #005CA9;
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+    p {
+      margin-bottom: 1rem;
+      color: #333333;
+      line-height: 1.4;
+    }
+    #question {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      border: 1px solid #CED4DA;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    #answer {
+      margin-top: 20px;
+      padding: 12px;
+      background: #F8FAFC;
+      border: 1px solid #E9ECEF;
+      border-radius: 4px;
+      white-space: pre-wrap;
+      min-height: 60px;
+      color: #333333;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 24px;
+      font-size: 1rem;
+      background-color: #005CA9;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+    }
+    button:hover {
+      background-color: #004A7D;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+<p>✱Les réponses sont générales, n'hésitez pas à consulter la fiche technique et le manuel d'installation pour plus de détails.</p>
+    
+    <input type="text" id="question" placeholder="Votre question..." />
+    <button onclick="answerQuestion()">Répondre</button>
+    <div id="answer"></div>
+  </div>
+
+  <script>
+    // Base de connaissances sous forme de tableau d'objets.
+    const knowledgeBase = [
+      {
+        keywords: ["qu’est", "qu'est-ce", "présentation", "ducobox", "d325 fr", "d325", "vmc", "duco", "vmc double flux"],
+        response: "La DucoBox Energy Comfort D325 FR est une unité de ventilation double flux compacte et légère (21 kg). \nElle est destinée aux logements individuels ou collectifs du T2 au T5. Grâce à des ventilateurs performants et un échangeur de chaleur à contre‑courant, elle récupère jusqu’à 94 % de la chaleur de l’air extrait tout en consommant très peu d’électricité. Un logiciel intégré permet à l’installateur de choisir le type de logement pour calibrer automatiquement les débits nécessaires."
+      },
+{
+        keywords: ["maison neuve", "rénovation", "adapté à quel type de maison", "type de maison"],
+        response: "🔹La Ducobox Energy Comfort D325FR ✱00004657✱ est conçue pour le résidentiel neuf RT2012/RE2020 mais peut aussi convenir à des rénovations. \n🔹La Ducobox Energy Comfort D325 ✱00004485✱ est idéale pour la rénovation"
+      },
+
+      {
+        keywords: ["dimensions", "taille", "poids", "mesure", "dimension"],
+        response: "Le caisson mesure environ 700 × 705 × 525 mm et pèse 21 kg. \nCette compacité permet une installation aisée par une seule personne et réduit l’encombrement dans le local technique."
+      },
+      {
+        keywords: ["débit", "m3", "m³"],
+        response: "🔹Le modèle D325 FR peut fournir jusqu’à 325 m³/h d’air neuf à une perte de charge de 150 Pa. \n🔹Le débit réel est ajusté par logiciel en fonction de la typologie de l’habitation pour optimiser la consommation énergétique."
+      },
+
+{
+        keywords: ["classe énergétique", "classification", "label"],
+        response: "🔹La Ducobox Energy Comfort D325 est classée A+ (avec deux capteurs). \n🔹La Ducobox Energy Comfort D325FR est classée A (Capteurs HY et CO2 ne peuvent pas être utilisés avec cette version NF)"
+      },
+
+     {
+        keywords: ["rendement", "efficacité", "échangeur", "performance", "récupération"],
+        response: "🔹L’échangeur de chaleur de la DucoBox Energy Comfort atteint une efficacité de récupération de chaleur jusqu’à 94 %. \n🔹La certification NF garantit un rendement minimal de 88 %. Ce haut rendement réduit les besoins en chauffage et en climatisation."
+      },
+      {
+        keywords: ["consommation", "puissance", "énergie"],
+        response: "🔹La consommation électrique de l’unité varie entre 16,2 W et 37,7 W selon le débit et les conditions de fonctionnement. \n🔹Grâce à cette faible consommation, la DucoBox Energy Comfort D325 FR bénéficie de la classe énergétique A."
+      },
+      {
+        keywords: ["filtre", "filtres", "filtration"],
+        response: "🔹Deux filtres dynamiques sont fournis : un filtre F7 (ISO ePM1 60 %) pour l’air soufflé et un filtre G4 (ISO Coarse 55 %) pour l’air extrait. \n🔹Ils assurent une bonne qualité d’air et protègent l’échangeur de chaleur."
+      },
+      {
+        keywords: ["fonction", "régulation", "intelligente", "by", "bypass", "antigel", "smart", "logique"],
+        response: "L’appareil intègre des fonctions intelligentes : régulation à débit constant malgré l’encrassement des filtres, by‑pass modulant pour le free cooling en été, protection antigel en hiver et bascule gauche/droite via un double by‑pass breveté. Le logiciel de calibration sélectionne le type de logement et ajuste automatiquement les débits."
+      },
+      {
+        keywords: ["différence", "hy", "co2", "version", "variant"],
+        response: "🔹La version D325 FR fonctionne à débit constant et est certifiée NF. \n🔹La version D325 HY/CO₂ utilise des capteurs d’humidité et de CO₂ et pilote des vannes multi‑zones pour moduler les débits. Elle permet jusqu’à 40 % d’économies d’énergie et une réduction sonore d’environ 30 %."
+      },
+      {
+        keywords: ["standard", "livré", "kit", "composant", "contenu", "base"],
+        response: "Le kit de base comprend l’unité de ventilation, un support mural, deux filtres (F7 et G4), un siphon de condensats et la notice d’installation."
+      },
+      {
+        keywords: ["accessoire", "option", "optionnel", "accessoires"],
+        response: "Les accessoires optionnels incluent : siphon plat, carte Connectivity Board pour la domotique, capteur d’humidité, chaises de fixation pour la pose au sol, vannes multi‑zones, pré‑chauffeur électrique et pièces de connexion pour différents diamètres de conduits."
+      },
+      {
+        keywords: ["installer", "installation", "montage", "pose"],
+        response: "🔹Pour installer la DucoBox, prévoyez un espace de 60 à 100 cm devant l’appareil. Fixez‑la sur un mur porteur ou utilisez des chaises de fixation. \n🔹Raccordez les conduits en suivant les repères ODA, SUP, ETA et EHA. Montez ensuite les accessoires (siphon, vannes, capteurs, pré‑chauffeur) et lancez l’auto‑calibration via l’application DUCO."
+      },
+      {
+        keywords: ["dimensionner", "conduit", "diamètre", "réseau", "pression"],
+        response: "Pour un fonctionnement optimal, limitez la perte de charge à 150 Pa et la vitesse de l’air à 3 m/s. \n🔹Utilisez des conduits adaptés : 100 mm pour 0–30 m³/h, 125 mm pour 30–150 m³/h, 160 mm pour 150–250 m³/h, 180 mm pour 250–350 m³/h et 200 mm pour 350–550 m³/h."
+      },
+      {
+        keywords: ["multi", "zone", "multi-zone", "vannes", "vanne"],
+        response: "Les clapets multi‑zones se placent sur les conduits de soufflage et modulent les débits pièce par pièce. Jusqu’à quatre vannes peuvent être commandées via des capteurs de CO₂ ou d’humidité pour optimiser la ventilation et réduire la consommation d’énergie."
+      },
+      {
+        keywords: ["connectivité", "connectique", "domotique", "modbus", "api"],
+        response: "🔹La carte Connectivity Board permet de connecter la DucoBox via REST API ou Modbus TCP en Ethernet ou Wi‑Fi. \n🔹On peut ainsi la piloter et la surveiller à distance via l’application DUCO et l’intégrer à un système de domotique."
+      },
+      {
+        keywords: ["certification", "classe", "norme", "nf", "ip"],
+        response: "🔹La DucoBox Energy Comfort D325 FR est certifiée NF avec un rendement minimal de 88 % et possède la classe énergétique A. \n🔹Ses filtres sont conformes à la norme ISO 16890 et l’ensemble bénéficie d’une protection IP40."
+      },
+      {
+        keywords: ["bénéfice", "avantage", "utilisateur", "gain", "santé"],
+        response: "🔹Cette ventilation récupère la chaleur pour réduire les dépenses de chauffage et de climatisation. \n🔹Elle assure un air intérieur sain en éliminant l’humidité et les polluants, et reste silencieuse et fiable. La version HY/CO₂ renforce ces bénéfices grâce à la modulation des débits."
+      },
+      {
+        keywords: ["maintenance", "entretien", "changer", "service", "filtre"],
+        response: "🔹Les filtres F7 et G4 doivent être remplacés régulièrement (au moins deux fois par an pour le F7). \n🔹Il convient aussi de vérifier le siphon, de nettoyer les conduits et d’effectuer un entretien annuel par un professionnel pour garantir la performance et la longévité de l’appareil."
+      },
+      {
+        keywords: ["logement", "t2", "t3", "t4", "t5", "appartement", "maison"],
+        response: "🔹Le modèle D325 FR convient aux logements T2 à T5, qu’il s’agisse d’appartements ou de maisons. \n🔹Le logiciel interne ajuste les débits selon la configuration pour assurer une ventilation optimale."
+      },
+      {
+        keywords: ["bruit", "silencieux", "niveau sonore", "db"],
+        response: "🔹La DucoBox Energy Comfort est conçue pour fonctionner silencieusement grâce à des ventilateurs performants et un caisson isolé. \n🔹La version HY/CO₂ est environ 30 % plus silencieuse en modulant les débits."
+      },
+      {
+        keywords: ["free", "cooling", "bypass", "rafraîchir", "free-cooling"],
+        response: "🔹Un by‑pass modulant permet de contourner l’échangeur lorsque la température extérieure est plus basse que celle intérieure. \n🔹Cela offre un rafraîchissement naturel en été, sans échange de chaleur, améliorant le confort nocturne."
+      },
+      {
+        keywords: ["tertiaire", "petit tertiaire", "ert", "erp", "vmc double flux tertiaire", "vmc double flux tertiaire", "secteur d'activités", "petit bureau" ],
+        response: "Il n'est pas recommande d'installer la DUCO dans le secteur tertiaire, y compris le petit tertiaire, en raison d’exigences réglementaires plus strictes que dans le résidentiel. Étant donné que la solution DUCO est principalement conçue pour le résidentiel, nous ne pouvons pas garantir qu’elle dispose de toutes les certifications nécessaires pour une utilisation en tertiaire. \n🔹Il est déconseillé d’installer des VMC double flux conçues uniquement pour le résidentiel dans ces établissements (ERP, ERT,...) sans une étude de conformité réglementaire. Dans certains cas, cela pourrait entraîner un refus de réception ou engager la responsabilité du maître d’ouvrage. \n🔹Les produits destinés au résidentiel (comme VMC DUCO) ne garantissent pas forcément la conformité aux exigences tertiaires (matériaux, sécurité incendie, etc.). \n🔹DUCO ne dispose pas de l’expertise nécessaire pour dimensionner ce type de projet. \n💡 N'hésitez pas à contacter l'équipe DX Tertiaire, peut être, vous trouverez une solution qui peut correspondre à ce type de projet."
+      },
+    ];
+
+    function answerQuestion() {
+      const questionInput = document.getElementById('question');
+      const answerDiv = document.getElementById('answer');
+      const question = questionInput.value.trim().toLowerCase();
+      if (!question) {
+        answerDiv.textContent = 'Veuillez saisir une question.';
+        return;
+      }
+      let found = false;
+      for (const entry of knowledgeBase) {
+        for (const keyword of entry.keywords) {
+          if (question.includes(keyword)) {
+            answerDiv.textContent = entry.response;
+            found = true;
+            break;
+          }
+        }
+        if (found) break;
+      }
+      if (!found) {
+        answerDiv.textContent = "Je n'ai pas cette information. Veuillez reformuler ou consulter la documentation technique.";
+      }
+    }
+  </script>
+</body>
+</html>
