@@ -1,0 +1,392 @@
+<div id="tabs" style="display: flex; gap: 10px; margin-bottom: 15px;">
+  <button class="tab-button" onclick="setTab('VMC Double Flux')">VMC Double Flux</button>
+  <button class="tab-button" onclick="setTab('Questions Générales')">Questions Générales</button>
+  <button class="tab-button" onclick="setTab('Segment Client')">Segment Client</button>
+</div>
+<script>
+  /* Le gestionnaire d'onglets est défini plus bas. Cette section a été
+     conservée vide pour éviter les définitions dupliquées de activeTab
+     et setTab. */
+</script>
+<script>
+  const vmcQuestions = [
+    { label: "💨 VMC Double Flux", value: "vmc double flux" },
+    { label: "🎥 Vidéo Duco", value: "vidéo duco" },
+    { label: "📘 Manuel d'installation", value: "manuel d'installation" },
+    { label: "📄 Fiche technique DucoBox", value: "fiche technique" },
+    { label: "🧩 Accessoires compatibles", value: "accessoires" },
+    { label: "📑 Brochure commerciale", value: "brochure" }
+  ];
+
+  const generalQuestions = [
+    { label: "💰 Comment réduire les coûts ?", value: "réduction coûts" },
+    { label: "🛠️ Comment installer une ventilation ?", value: "installer ventilation" },
+    { label: "🔧 Cas Maintenance", value: "cas maintenance" }
+  ];
+
+  const clientSegments = [
+    { label: "🏢 Cas Promoteur", value: "cas promoteur" },
+    { label: "📐 Cas Bureau d'études", value: "cas bureau d'études" },
+    { label: "🛠️ Cas Installateur", value: "cas installateur" },
+    { label: "🏠 Cas Client Final", value: "cas client final" }
+  ];
+</script>
+<div id="questionButtons" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;"></div>
+
+<script>
+  function renderQuestions() {
+    const container = document.getElementById("questionButtons");
+    container.innerHTML = "";
+
+    const currentList =
+      activeTab === "VMC Double Flux"
+        ? vmcQuestions
+        : activeTab === "Questions Générales"
+        ? generalQuestions
+        : clientSegments;
+
+    currentList.forEach((q) => {
+      const btn = document.createElement("button");
+      btn.textContent = q.label;
+      // En mode « saisie puis validation »: un clic remplit le champ de saisie
+      // et vide la réponse. L'utilisateur doit ensuite cliquer sur « Poser la question ».
+      btn.onclick = () => {
+        const inputField = document.getElementById('questionInput');
+        if (inputField) {
+          inputField.value = q.value;
+        }
+        clearResponse();
+      };
+      btn.style = `
+        padding: 6px 10px;
+        background-color: ${
+          activeTab === "VMC Double Flux"
+            ? "#E8F5E9"
+            : activeTab === "Questions Générales"
+            ? "#F3E5F5"
+            : "#FFF3E0"
+        };
+        border: 1px solid ${
+          activeTab === "VMC Double Flux"
+            ? "#43A047"
+            : activeTab === "Questions Générales"
+            ? "#6A1B9A"
+            : "#E65100"
+        };
+        color: ${
+          activeTab === "VMC Double Flux"
+            ? "#2E7D32"
+            : activeTab === "Questions Générales"
+            ? "#6A1B9A"
+            : "#E65100"
+        };
+        border-radius: 5px;
+        font-size: 0.85em;
+        cursor: pointer;
+      `;
+      container.appendChild(btn);
+    });
+  }
+</script>
+<div style="margin-bottom: 15px;">
+  <input
+    id="questionInput"
+    type="text"
+    placeholder="Pose ta question..."
+    style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc; margin-bottom: 10px;"
+  />
+  <button
+    onclick="askQuestion()"
+    style="padding: 8px 12px; background-color: #004B87; color: white; border: none; border-radius: 5px; cursor: pointer;"
+  >
+    Poser la question
+  </button>
+</div>
+<div id="responseContainer" style="margin-top: 20px; background-color: #f5f5f5; padding: 15px; border-radius: 8px;"></div>
+<script>
+  function clearResponse() {
+    document.getElementById("responseContainer").innerHTML = "";
+  }
+
+  // Dictionnaire de synonymes permettant d'associer des mots clés
+  // à des requêtes officielles reconnues par getResponse().
+  const synonyms = {
+    "fiche": "fiche technique",
+    "fiche technique": "fiche technique",
+    "manuel": "manuel d'installation",
+    "installation": "manuel d'installation",
+    "manuel d'installation": "manuel d'installation",
+    "brochure": "brochure",
+    "vidéo": "vidéo duco",
+    "video": "vidéo duco",
+    "vidéo duco": "vidéo duco",
+    "accessoires": "accessoires",
+    "accessoire": "accessoires",
+    "neuf": "neuf",
+    "reno": "rénovation",
+    "réno": "rénovation",
+    "rénovation": "rénovation",
+    "comparatif": "comparatif",
+    "d325": "comparatif",
+    "d325fr": "comparatif"
+  };
+
+  // Normalise une requête en tenant compte des synonymes.
+  // On retourne d'abord la correspondance exacte si elle existe.
+  // Ensuite on recherche la présence de n'importe quel terme du dictionnaire
+  // à l'intérieur de la chaîne (en privilégiant les termes longs),
+  // puis on cherche mot à mot. Sans correspondance, on renvoie la chaîne
+  // d'origine en minuscules.
+  function normalizeInput(input) {
+    const trimmed = (input || "").trim().toLowerCase();
+    if (!trimmed) return "";
+    // correspondance exacte
+    if (Object.prototype.hasOwnProperty.call(synonyms, trimmed)) {
+      return synonyms[trimmed];
+    }
+    // recherche de clé contenue dans la chaîne, en commençant par les plus longues
+    const keys = Object.keys(synonyms).sort((a, b) => b.length - a.length);
+    for (const key of keys) {
+      if (trimmed.includes(key)) {
+        return synonyms[key];
+      }
+    }
+    // recherche sur chaque mot
+    const words = trimmed.split(/\s+/);
+    for (const word of words) {
+      if (Object.prototype.hasOwnProperty.call(synonyms, word)) {
+        return synonyms[word];
+      }
+    }
+    return trimmed;
+  }
+
+  function askQuestion(value = null) {
+    // Si un paramètre est fourni, il est utilisé tel quel ; sinon, on lit la saisie.
+    let input = value != null ? value : document.getElementById("questionInput").value;
+    // Normalise l'entrée pour traiter les synonymes et chaînes longues.
+    input = normalizeInput(input);
+    const responseHTML = getResponse(input);
+    document.getElementById("responseContainer").innerHTML = responseHTML;
+  }
+</script>
+<script>
+  function getResponse(q) {
+    switch (q) {
+      case "vmc double flux":
+        return `
+          <button onclick="askQuestion('neuf')" style="margin-bottom:10px;">🏠 Application "NEUF"</button>
+          <button onclick="askQuestion('rénovation')" style="margin-bottom:10px;">🛠️ Application "RÉNOVATION"</button>
+          <button onclick="askQuestion('comparatif')" style="margin-bottom:10px;">📊 Comparatif D325 vs D325FR</button>
+        `;
+
+      case "neuf":
+      return `
+          <button onclick="askQuestion('vmc double flux')" style="margin-bottom:10px;">⬅️ Retour</button>
+          <p><strong>Application résidentielle en neuf (D325FR certifiée NF)</strong></p>
+          <ul>
+            <li>🏘️ Solution idéale certifiée NF pour projets neufs du T2 au T5+</li>
+            <li>🔁 Échangeur haute performance 94% + ventilateurs silencieux</li>
+            <li>🌬️ Filtration rigoureuse = qualité d'air optimale</li>
+            <li>⚖️ Compacte, légère (21kg), installable seul</li>
+            <li>↔️ Interchangeable gauche/droite sans outils</li>
+            <li>📲 Logiciel intégré : paramétrage automatique selon type de logement</li>
+            <li>🧰 Maintenance facilitée (accès frontal)</li>
+            <li>🔗 Système complet avec : VMC + bouches + conduits + régulation</li>
+            <li>🔇 Conduits DucoFlex classe D – Zéro Bruit</li>
+            <li>📱 Application DUCO : calibration & suivi à distance</li>
+            <li>🧠 Gestion intelligente des débits (base/pointe)</li>
+          </ul>
+        `;
+
+      case "rénovation":
+      return `
+          <button onclick="askQuestion('vmc double flux')" style="margin-bottom:10px;">⬅️ Retour</button>
+          <p><strong>Application résidentielle en rénovation (D325 non NF)</strong></p>
+          <ul>
+            <li>🏚️ Débit ajustable jusqu’à 325 m³/h</li>
+            <li>❄️ Free-cooling été / chaleur hiver – classe A+ (2 capteurs)</li>
+            <li>🧪 Détection CO₂ et hygrométrie</li>
+            <li>⚖️ Léger (21 kg) – Installation facile</li>
+            <li>↔️ Interchangeable gauche/droite sans démontage</li>
+            <li>🔄 Équilibrage automatique par pression constante</li>
+            <li>📦 Fonction copie pour lotissements</li>
+            <li>🔇 DucoFlex silencieux – Classe D</li>
+          </ul>
+        `;
+
+      case "comparatif":
+      return `
+          <button onclick="askQuestion('vmc double flux')" style="margin-bottom:10px;">⬅️ Retour</button>
+          <strong>📊 Comparatif DucoBox D325 vs D325FR (certifiée NF)</strong>
+          <table border="1" cellpadding="5" style="border-collapse: collapse; margin-top: 10px;">
+            <thead style="background:#004B87; color:white;">
+              <tr>
+                <th>Critères</th>
+                <th>D325</th>
+                <th>D325FR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Référence</td><td>00004649</td><td>00004657</td></tr>
+              <tr><td>Débit max</td><td>325 m³/h</td><td>T2 au T5+</td></tr>
+              <tr><td>Poids</td><td>21 kg</td><td>21 kg</td></tr>
+              <tr><td>Rendement</td><td>88%</td><td>94%</td></tr>
+              <tr><td>Capteurs</td><td>CO₂ + humidité</td><td>Non</td></tr>
+              <tr><td>NF</td><td>Non</td><td>Oui</td></tr>
+            </tbody>
+          </table>
+        `;
+
+      case "vidéo duco":
+        return `
+          <p><strong>🎥 Vidéo de présentation Duco</strong></p>
+          <a href="https://www.youtube.com/watch?v=7Is17RT9G30" target="_blank">📺 Voir la vidéo</a>
+        `;
+
+      case "manuel d'installation":
+        return `
+          <p><strong>📘 Manuels d'installation</strong></p>
+          <ul>
+            <li>D325FR (NF) : <a href="https://easyspec.daikin.fr/Easyspec/Ventilation/Documentations/A_D325FR/Manuel%20installation/ManInst_A_D325FR.pdf" target="_blank">Télécharger</a></li>
+            <li>D325 : <a href="https://easyspec.daikin.fr/Easyspec/Ventilation/Documentations/B_D325/ManInst_B_D325.pdf" target="_blank">Télécharger</a></li>
+          </ul>
+        `;
+
+      case "brochure":
+        return `
+          <p><strong>📑 Brochure commerciale</strong></p>
+          <a href="https://easyspec.daikin.fr/Easyspec/Ventilation/Documentations/A_D325FR/Brochure%20commerciale/Broc_A_D325FR.pdf" target="_blank">📄 Télécharger</a>
+        `;
+
+      case "fiche technique":
+        return `
+          <p><strong>📄 Fiches techniques</strong></p>
+          <ul>
+            <li>D325 : <a href="https://easyspec.daikin.fr/Easyspec/Ventilation/Documentations/B_D325/FicheTech_B_D325.pdf" target="_blank">Télécharger</a></li>
+            <li>D325FR : <a href="https://easyspec.daikin.fr/Easyspec/Ventilation/Documentations/A_D325FR/FicheTech_A_D325FR.pdf" target="_blank">Télécharger</a></li>
+          </ul>
+        `;
+
+      case "accessoires":
+        return `
+          <p>🧩 Liste des accessoires compatibles :</p>
+          <ul>
+            <li>DucoFlex</li>
+            <li>Siphon</li>
+            <li>Pré-chauffeur</li>
+            <li>Régulateurs</li>
+            <li>Silencieux</li>
+            <li>Bouches</li>
+          </ul>
+          <a href="https://easyspec.daikin.fr/Easyspec/Ventilation/Documentations/A_D325FR/Liste%20accessoires/Acc_A_D325FR.pdf" target="_blank">Voir la liste complète</a>
+        `;
+
+      case "réduction coûts":
+        return `
+          <p><strong>💰 Réduction des coûts</strong></p>
+          <ul>
+            <li>Récupération de chaleur = économies</li>
+            <li>Moins de chauffage/refroidissement</li>
+            <li>Moins de maintenance</li>
+          </ul>
+        `;
+
+      case "installer ventilation":
+        return `
+          <p><strong>🛠️ Installation ventilation</strong></p>
+          <ol>
+            <li>Évaluation logement</li>
+            <li>Conception du réseau</li>
+            <li>Installation</li>
+            <li>Tests / mise en service</li>
+          </ol>
+        `;
+
+      case "cas maintenance":
+        return `
+          <p><strong>🔧 Maintenance</strong></p>
+          <ul>
+            <li>Remplacement filtres</li>
+            <li>Application DUCO pour suivi</li>
+            <li>Contrat d'entretien conseillé</li>
+          </ul>
+        `;
+
+      case "cas promoteur":
+        return `
+          <p><strong>🏢 Cas Promoteur</strong></p>
+          <ul>
+            <li>Valorisation énergétique (NF)</li>
+            <li>Réduction charges exploitation</li>
+          </ul>
+        `;
+
+      case "cas bureau d'études":
+        return `
+          <p><strong>📐 Cas Bureau d'études</strong></p>
+          <ul>
+            <li>Fiches techniques</li>
+            <li>Conformité RE2020</li>
+            <li>BIM et outils de calcul</li>
+          </ul>
+        `;
+
+      case "cas installateur":
+        return `
+          <p><strong>🛠️ Cas Installateur</strong></p>
+          <ul>
+            <li>Installation rapide</li>
+            <li>Raccordement facile</li>
+            <li>Calibration automatique</li>
+          </ul>
+        `;
+
+      case "cas client final":
+        return `
+          <p><strong>🏠 Cas Client Final</strong></p>
+          <ul>
+            <li>Confort thermique</li>
+            <li>Air purifié</li>
+            <li>Silencieux</li>
+          </ul>
+        `;
+
+      default:
+        return `<p>❓ Question inconnue. Essaie un libellé comme "neuf", "vidéo duco", "cas installateur", etc.</p>`;
+    }
+  }
+</script>
+
+<script>
+  let activeTab = "VMC Double Flux";
+
+  function setTab(tabName) {
+    activeTab = tabName;
+    updateTabStyle();
+    renderQuestions();      // Affiche les bons boutons
+    clearResponse();        // Vide la réponse si on change d’onglet
+  }
+
+  function updateTabStyle() {
+    const buttons = document.querySelectorAll(".tab-button");
+    buttons.forEach(btn => {
+      if (btn.innerText === activeTab) {
+        btn.style.backgroundColor = "#004B87";
+        btn.style.color = "white";
+      } else {
+        btn.style.backgroundColor = "#E3F2FD";
+        btn.style.color = "#004B87";
+      }
+    });
+  }
+
+  // Appel initial au chargement de la page :
+  document.addEventListener("DOMContentLoaded", () => {
+    updateTabStyle();
+    renderQuestions();
+  });
+</script>
+
+
+
